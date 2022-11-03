@@ -1,0 +1,48 @@
+#left_panel {
+    width: 20em;	height: 23em;
+    border: 2px solid #969696;
+    text-align: center;
+    box-shadow: 5px 5px 5px #adadad;
+    font-family: "Rockwell Condensed", sans-serif;
+    background-color: white;
+
+
+    position: fixed; /* Фиксированное положение */
+    left: 2em; /* Расстояние от правого края окна браузера */
+    top: 25%; /* Расстояние сверху */
+    padding: 10px; /* Поля вокруг текста */
+}
+
+#knifes_list{
+    border: 2px solid #969696;
+    width: 66em;	height: 50em;
+
+    margin-left: 26em;
+    margin-top: 10em;
+}
+
+.select_left_panel{
+    width: 20em;
+    height: 1.5em;
+    font-family: "Rockwell Condensed", sans-serif;
+}
+
+.input_left_panel{
+    width: 15em;
+    height: 1.5em;
+}
+
+#btn_left_panel{
+    appearance: none;
+  border: 1px solid #969696;
+  border-radius: 5px;
+  background: white;
+  color: #000000;
+  padding: 8px 16px;
+  font-size: 16px;
+}
+
+#btn_left_panel:hover{
+    background: #5b5b5b;
+    color: #ffffff;
+}
