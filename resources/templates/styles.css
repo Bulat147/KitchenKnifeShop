@@ -14,16 +14,16 @@
 }
 
 #knifes_list{
-    border: 2px solid #969696;
-    width: 66em;	height: 50em;
+
+    width: 66em;
 
     margin-left: 26em;
-    margin-top: 10em;
+    margin-top: 6em;
 }
 
 .select_left_panel{
     width: 20em;
-    height: 1.5em;
+    height: 1.8em;
     font-family: "Rockwell Condensed", sans-serif;
 }
 
@@ -34,15 +34,224 @@
 
 #btn_left_panel{
     appearance: none;
-  border: 1px solid #969696;
-  border-radius: 5px;
-  background: white;
-  color: #000000;
-  padding: 8px 16px;
-  font-size: 16px;
+    border: 1px solid #969696;
+    border-radius: 5px;
+    background: white;
+    color: #000000;
+    padding: 8px 16px;
+    font-size: 16px;
 }
 
 #btn_left_panel:hover{
     background: #5b5b5b;
     color: #ffffff;
+}
+
+.card{
+    box-shadow: 3px 3px 3px #adadad;
+    border: 2px solid #969696;
+    width: 65em;	height: 25em;
+    margin: 0 0 0.8em;
+}
+
+#header{
+    width: 100%;
+    height: 2em;
+    background-color: white;
+    box-shadow: 0 3px 3px #adadad;
+
+    border: 2px solid #969696;
+    position: fixed; /* Фиксированное положение */
+    left: 0; /* Расстояние от правого края окна браузера */
+    top: 0; /* Расстояние сверху */
+    padding: 10px; /* Поля вокруг текста */
+}
+
+#icon-text{
+    border: none;
+    background-color: white;
+    color: black;
+    text-decoration: none;
+
+    font-weight: bold;
+    font-size: large;
+    margin-top: 0.18em;
+    margin-left: 1.2em;
+
+    font-family: "Arial Black", serif;
+}
+
+#icon-text > b {
+    color: #8a0000;
+}
+
+#login{
+    min-height: 100%;
+    /*border: 2px solid #969696;*/
+    margin-left: 73em;
+    text-align: center;
+
+}
+
+#logining {
+    appearance: none;
+    border: 2px solid #727272;
+    border-radius: 5px;
+    background: white;
+    color: #000000;
+    padding: 6px 16px;
+    font-size: 14px;
+}
+
+#logining:hover{
+    background: #8a0000;
+    color: #ffffff;
+}
+
+.crd_img{
+    width: 26em;
+    /*border: 2px solid #727272;*/
+    height: 100%;
+    display: flex;
+}
+
+.crd_img > img{
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.crd_cnt{
+    width: 38em;
+    margin-left: 2px;
+    height: 99%;
+}
+
+.crd_cnt > .name {
+    text-align: center;
+    margin-top: 1em;
+    font-size: large;
+    font-family: "Arial Black", serif;
+}
+
+.crd_cnt > .info{
+    font-size: large;
+    font-family: "Arial", serif;
+    margin-top: 2em;
+    margin-left: 6em;
+}
+
+.in_favorites{
+    /*border: 2px solid #727272;*/
+    width: 12em;
+    height: 3em;
+    margin-top: 3em;
+    margin-left: 5em;
+    text-align: center;
+}
+
+.in_favorites > button{
+    width: 10em;
+    margin-top: 0.3em;
+    appearance: none;
+    border: 2px solid #727272;
+    border-radius: 5px;
+    background: white;
+    color: #000000;
+    padding: 6px 16px;
+    font-size: 18px;
+}
+
+.in_favorites > button:hover{
+    background: #8a0000;
+    color: #ffffff;
+}
+
+.in_basket{
+    /*border: 2px solid #727272;*/
+    width: 12em;
+    height: 3em;
+    margin-top: 3em;
+    margin-left: 6em;
+    text-align: center;
+}
+
+.in_basket > button{
+    width: 10em;
+    margin-top: 0.3em;
+    appearance: none;
+    border: 2px solid #727272;
+    border-radius: 5px;
+    background: white;
+    color: #000000;
+    padding: 6px 16px;
+    font-size: 18px;
+}
+
+.in_basket > button:hover{
+    background: #5b5b5b;
+    color: #ffffff;
+}
+
+.dropdown_menu{
+    margin-top: 0.6em;
+    margin-left: 0;
+
+
+    display: none;
+    background-color: white;
+    box-shadow: 0 3px 3px #adadad;
+
+    /*border: 2px solid #969696;*/
+    position: fixed;
+    min-width: 12em;
+    z-index: 1;
+}
+
+.dropdown_menu > a{
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown_menu > a:hover{
+    background-color: #ddd;
+}
+
+.person{
+    text-align: center;
+    margin-left: 70em;
+    height: 3em;
+    width: 12em;
+    /*background-color: #8a0000;*/
+}
+
+.person button{
+    text-align: center;
+    border: none;
+    background-color: white;
+    margin-top: 0.3em;
+    margin-left: 0;
+    font-size: 19px;
+    font-weight: bolder;
+}
+
+.person:hover .dropdown_menu{
+    display: block;
+}
+.person:hover button{
+    color: #8a0000;
+}
+
+/* authorization.html */
+
+.auth_block{
+    margin-top: 10em;
+    margin-left: 30em;
+    width: 35em;
+    height: 30em;
+    border: 2px solid #727272;
+    border-radius: 7px;
+
+    box-shadow: 5px 5px 5px #adadad;
 }
