@@ -27,6 +27,7 @@ create table person(
 create table purchase(
     id bigserial primary key,
     person_login varchar(20),
+    purchase_date date,
 
 
     CONSTRAINT purchase_person_fk FOREIGN KEY (person_login) REFERENCES person(login)

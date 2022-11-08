@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Избранное</title>
+    <title>Корзина</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,39 +19,19 @@
                 <a>Выйти</a>
             </div>
         </div>
-        <p class="page_name">ИЗБРАННОЕ</p>
+        <p class="page_name">КОРЗИНА</p>
     </div>
 </header>
 
 
 <div style="overflow: hidden">
-    <div id="left_panel" style="float: left;">
-        <p style="font-size: 19px; font-weight: bold">Фильтр</p>
-        <p>Тип:</p>
-        <select name="type" class="select_left_panel">
-            <option value="1">Синий</option>
-            <option value="2">Зеленый</option>
-            <option value="3">Желтый</option>
-            <option value="4">Красный</option>
-            <option value="5">Оранжевый</option>
-            <option value="6">Черный</option>
-        </select>
+    <div id="left_panel2" style="float: left;">
 
-        <p>Компания:</p>
-        <select name="company" class="select_left_panel">
-            <option value="1">Синий</option>
-            <option value="2">Зеленый</option>
-            <option value="3">Желтый</option>
-            <option value="4">Красный</option>
-            <option value="5">Оранжевый</option>
-            <option value="6">Черный</option>
-        </select>
-
-        <p>Цена от:</p>
-        <input name="cool" class="input_left_panel">
-        руб.
-        <br><br><br>
-        <button id="btn_left_panel">Показать</button>
+        <p style="font-size: 19px; font-weight: bold;">Информация</p>
+        <p style="margin-left: 0; margin-top: 2em;">Количество товаров: {{}}</p>
+        <p style="margin-left: 0; margin-top: 2em;">Общая сумма: {{}} руб</p>
+        <br><br>
+        <button id="btn_left_panel">Сделать заказ</button>
     </div>
 
     <div id="knifes_list" style="float: left;">
@@ -70,7 +50,7 @@
 
                 <div class="crd_buttons" style="overflow: hidden;">
                     <div style="float: left" class="in_favorites">
-                        <button>В корзину</button>
+
                     </div>
                     <div style="float: left" class="in_basket">
                         <button>Удалить</button>
@@ -93,7 +73,7 @@
 
                 <div class="crd_buttons" style="overflow: hidden;">
                     <div style="float: left" class="in_favorites">
-                        <button>В корзину</button>
+
                     </div>
                     <div style="float: left" class="in_basket">
                         <button>Удалить</button>
@@ -101,11 +81,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
     </div>
 
 </div>
