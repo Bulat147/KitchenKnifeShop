@@ -4,7 +4,7 @@ import psycopg2
 class Database:
     def __init__(self):
         self.con = psycopg2.connect(
-            dbname="orisLesson0510",
+            dbname="knife_shop",
             user="postgres",
             password="root",
             host="localhost",
@@ -15,8 +15,6 @@ class Database:
     def select(self, query):
         self.cur.execute(query)
         data = self.prepare_data(self.cur.fetchall())
-        if len(data) == 1:
-            data = data[0]
 
         return data
 

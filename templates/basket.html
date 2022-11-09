@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<header id="header">
+    <div style="overflow: hidden">
+        <a href="" id="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <div class="person" style="float: left">
+            <button>bulatHulk</button>
+            <div class="dropdown_menu">
+                <a href="">Личный кабинет</a>
+                <a>Заказы</a>
+                <a>Избранное</a>
+                <a>Корзина</a>
+                <a>Выйти</a>
+            </div>
+        </div>
+        <p class="page_name">КОРЗИНА</p>
+    </div>
+</header>
+
+<div style="overflow: hidden">
+    <div id="left_panel" style="float: left;">
+        <p style="font-size: 19px; font-weight: bold">Фильтр</p>
+        <form id="ff" action="/">
+            <p>Тип:</p>
+            <select name="type" class="select_left_panel">
+                {% for type in types %}
+                {% if typed == type.name %}
+                <option value="{{type.name}}" SELECTED>{{type.description}}</option>
+                {% else %}
+                <option value="{{type.name}}">{{type.description}}</option>
+                {% endif %}
+                {% endfor %}}
+            </select>
+
+            <p>Компания:</p>
+            <select name="company" class="select_left_panel">
+                {% for company in companies %}
+                {% if companied == company.name %}
+                <option value="{{company.name}}" SELECTED>{{company.name}}</option>
+                {% else %}
+                <option value="{{company.name}}">{{company.name}}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+
+            <p>Цена до:</p>
+            <input name="cool" class="input_left_panel">
+            руб.
+            <br><br><br>
+        </form>
+        <input id="btn_left_panel" type="submit" form="ff" value="Показать">
+    </div>
+
+    <div id="knifes_list" style="float: left;">
+
+        {% for knife in knifes %}
+
+        <div class="card" style="overflow: hidden">
+            <div class="crd_img" style="float: left">
+                <img src="../static/chef-min.jpg">
+            </div>
+            <div class="crd_cnt" style="float: left">
+                <div class="name">{{knife.k_name}}</div>
+                <div class="info">Компания: {{knife.company_name}}</div>
+                <div class="info">Тип: {{knife.description}}</div>
+                <div class="info">Страна: {{knife.country}}</div>
+                <div class="info">Цена: {{knife.price}} рублей</div>
+
+                <div class="crd_buttons" style="overflow: hidden;">
+                    <div style="float: left" class="in_favorites">
+
+                    </div>
+                    <div style="float: left" class="in_basket">
+                        <button>Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,18 +1,22 @@
 create table company(
-    id bigserial primary key,
-    name varchar(30) unique,
+    name varchar(30) primary key,
     country varchar(25)
+);
+
+create table type(
+    name varchar(30) primary key,
+    description varchar(100) unique
 );
 
 create table knife(
     id bigserial primary key,
     name varchar(30) unique,
-    type varchar(25),
+    type_name varchar(30) REFERENCES type(name),
     price integer,
-    company_id bigint,
+    company_name varchar(30),
     photo_path varchar(50),
 
-    CONSTRAINT knife_company_fk FOREIGN KEY (company_id) REFERENCES company(id)
+    CONSTRAINT knife_company_fk FOREIGN KEY (company_name) REFERENCES company(name)
 );
 
 create table person(
@@ -52,3 +56,4 @@ create table purchase_knifes(
 
     constraint prc_knf_pk primary key (purchase_id, knife_id)
 );
+
