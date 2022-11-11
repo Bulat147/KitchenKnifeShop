@@ -57,3 +57,14 @@ create table purchase_knifes(
     constraint prc_knf_pk primary key (purchase_id, knife_id)
 );
 
+create table basket(
+    basket_id bigserial primary key,
+    person_login varchar(20) references person(login)
+)
+
+create table basket_knifes(
+    knife_id bigint references knife(id),
+    basket_id bigint references basket(basket_id),
+
+    constraint bsk_knf_pk primary key (knife_id, basket_id)
+)

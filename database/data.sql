@@ -13,3 +13,9 @@ VALUES ('Jashoui', 'Франция');
 INSERT INTO type
 VALUES ('bread', 'Нож для хлеба');
 
+INSERT INTO basket(person_login)
+values ('bulatHulk');
+
+INSERT INTO basket_knifes
+VALUES (1, 1);
+

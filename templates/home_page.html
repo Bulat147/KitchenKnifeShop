@@ -2,6 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script type="text/javascript">
+        function validate_form(){
+            //Считаем значения из полей name и email в переменные x и y
+            var price =document.forms["left_form"]["cool"].value;
+            var tst = /^[0-9]+$/.test(price);
+            if(tst != 1){
+                var price_field = document.getElementsByName("cool")[0];
+                price_field.style.border = "2px solid red"
+                return false;
+            }
+        }
+    </script>
+
     <title>{{title}}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='styles.css', v=1)}}">
 </head>
@@ -16,14 +29,14 @@
     <!--    </div>-->
 
     <div style="overflow: hidden">
-        <a href="" id="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <a href="/" id="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div class="person" style="float: left">
             <button>bulatHulk</button>
             <div class="dropdown_menu">
-                <a href="">Личный кабинет</a>
-                <a>Заказы</a>
-                <a>Избранное</a>
-                <a>Корзина</a>
+                <a href="/lk">Личный кабинет</a>
+                <a href="/purchases">Заказы</a>
+                <a href="/favorites">Избранное</a>
+                <a href="/basket">Корзина</a>
                 <a>Выйти</a>
             </div>
         </div>
@@ -34,9 +47,14 @@
 <div style="overflow: hidden">
     <div id="left_panel" style="float: left;">
         <p style="font-size: 19px; font-weight: bold">Фильтр</p>
-        <form id="ff" action="/">
+        <form name="left_form" onsubmit="return validate_form()" id="ff" action="/">
             <p>Тип:</p>
             <select name="type" class="select_left_panel">
+                {% if typed == "all" %}
+                <option value="" SELECTED>Все</option>
+                {% else %}
+                <option value="">Все</option>
+                {% endif %}
                 {% for type in types %}
                 {% if typed == type.name %}
                 <option value="{{type.name}}" SELECTED>{{type.description}}</option>
@@ -48,6 +66,11 @@
 
             <p>Компания:</p>
             <select name="company" class="select_left_panel">
+                {% if companied == "all" %}
+                <option value="" SELECTED>Все</option>
+                {% else %}
+                <option value="">Все</option>
+                {% endif %}
                 {% for company in companies %}
                 {% if companied == company.name %}
                 <option value="{{company.name}}" SELECTED>{{company.name}}</option>
@@ -58,7 +81,7 @@
             </select>
 
             <p>Цена до:</p>
-            <input name="cool" class="input_left_panel">
+            <input name="cool" class="input_left_panel" value="{{ priced }}">
             руб.
             <br><br><br>
         </form>
