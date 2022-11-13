@@ -318,10 +318,11 @@
 }
 
 .purch_card {
+    text-align: center;
     box-shadow: 3px 3px 3px #adadad;
     border: 2px solid #969696;
-    width: 55em;	min-height: 20em;
-    margin: 0 4em 0.8em;
+    width: 40em;	min-height: 20em;
+    margin: 0 12em 0.8em;
 }
 
 #purch_knifes_list {
@@ -347,7 +348,7 @@
 .card_item {
     font-family: "Arial", sans-serif;
     font-size: 17px;
-    margin-left: 6em;
+    /*margin-left: 6em;*/
     margin-top: 2em;
 }
 

@@ -13,6 +13,7 @@
                 return false;
             }
         }
+
     </script>
 
     <title>{{title}}</title>
@@ -104,12 +105,14 @@
                 <div class="info">Цена: {{knife.price}} рублей</div>
 
                 <div class="crd_buttons" style="overflow: hidden;">
+                    <form action="/">
                     <div style="float: left" class="in_favorites">
-                        <button>В избранное</button>
+                        <button type="submit" name='fvr' value="{{knife.k_name}}">В избранное</button>
                     </div>
                     <div style="float: left" class="in_basket">
-                        <button>В корзину</button>
+                        <button type="submit" name='bsk' value="{{knife.k_name}}">В корзину</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>

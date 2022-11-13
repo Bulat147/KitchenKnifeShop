@@ -28,25 +28,15 @@
 
     <div id="purch_knifes_list" style="float: left;">
 
-
+        {% for prch_knfs in entity %}
         <div class="purch_card" style="overflow: hidden">
-            <div class="purch_card_name">Заказ от {{}}</div>
-            <div class="itogo">На сумму {{}} рублей </div>
-            <div class="card_item">Knife_name1: {{}} руб</div>
-            <div class="card_item">Knife_name2: {{}} руб</div>
-            <div class="card_item">Knife_name3: {{}} руб</div>
+            <div class="purch_card_name">Заказ от <b>{{prch_knfs.0.purchase_date}}</b></div>
+            <div class="itogo">На сумму {{prch_knfs.0.amount}} рублей </div>
+            {% for knife in prch_knfs.1 %}
+            <div class="card_item"><b>{{knife.name}}</b>: {{ knife.price }} руб</div>
+            {% endfor %}
         </div>
-
-        <div class="purch_card" style="overflow: hidden">
-            <div class="purch_card_name">Заказ от {{}}</div>
-            <div class="itogo">На сумму {{}} рублей </div>
-            <div class="card_item">Knife_name1: {{}} руб</div>
-            <div class="card_item">Knife_name2: {{}} руб</div>
-            <div class="card_item">Knife_name3: {{}} руб</div>
-        </div>
-
-
-
+        {% endfor %}
 
 
     </div>

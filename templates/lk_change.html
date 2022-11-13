@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Личный кабинет</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
@@ -26,7 +26,7 @@
 
 <div class="auth_block">
     <div class="naming">Изменить данные</div>
-    <form action="" method="post">
+    <form action="/lk" method="post">
         <div class="auth_text">Логин:</div>
         <input class="auth_input" name="login">
         <div class="auth_text">Адрес:</div>

@@ -19,3 +19,11 @@ values ('bulatHulk');
 INSERT INTO basket_knifes
 VALUES (1, 1);
 
+INSERT INTO purchase(person_login, purchase_date)
+VALUES ('bulatHulk', 2022-11-12);
+
+INSERT INTO purchase_knifes
+VALUES (1, 2);
+
+INSERT INTO purchase_knifes
+VALUES (1, 1);

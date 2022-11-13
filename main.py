@@ -16,6 +16,31 @@ db = Database()
 
 @app.route("/")
 def knifes_list():
+    # TODO: тут проверить пользователя на авторизоавнность
+    user_login = "bulatHulk"
+
+    fvr = request.args.get("fvr")
+    bsk = request.args.get("bsk")
+
+    if fvr is not None and fvr != "":
+        # TODO: если пользак не авторизован - перекинуть на авторизацию
+        knf_name = fvr
+        knife = db.select(f"SELECT * FROM knife k where k.name = '{knf_name}'")
+        knife_in = db.select(f"SELECT knife_id FROM favorites_knifes fk "
+                             f"where fk.favorites_key = '{user_login}' and fk.knife_id = {knife[0]['id']}")
+        if len(knife_in) == 0:
+            db.insert(f"INSERT INTO favorites_knifes VALUES ('{user_login}', {knife[0]['id']})")
+
+
+    if bsk is not None and bsk != "":
+        # TODO: если пользак не авторизован - перекинуть на авторизацию
+        knf_name = bsk
+        knife = db.select(f"SELECT * FROM knife k where k.name = '{knf_name}'")
+        basket_id = db.select(f"SELECT basket_id from basket b where b.person_login = '{user_login}'")
+        knife_in = db.select(f"SELECT knife_id FROM basket_knifes bk "
+                             f"where bk.basket_id = {basket_id[0]['basket_id']} and bk.knife_id = {knife[0]['id']}")
+        if len(knife_in) == 0:
+            db.insert(f"INSERT INTO basket_knifes VALUES ({knife[0]['id']}, {basket_id[0]['basket_id']})")
 
     companies = db.select("SELECT * FROM company c")
     types = db.select("SELECT * FROM type t")
@@ -208,27 +233,51 @@ def basket():
     return render_template("basket.html", **context)
 
 
-#
-#
-# @app.route("/film/<int:film_id>")
-# def get_film(film_id):
-#     # переписываем запрос с помощью SQLAlchemy
-#     # в данном случае при отсутствии указанного фильма, выходит 404 ошибка
-#     film = db.get_or_404(Films, film_id)
-#     return render_template("film.html", title=film.name, film=film)
-#
-#
-# # метод для создания заметки
-# @app.route("/add_note", methods=['get', 'post'])
-# def add_note():
-#     if request.method == "POST":
-#         note = request.form.get('note')
-#
-#         db.cur.execute("INSERT INTO notes(note) VALUES (%s)", (note, ))
-#         db.con.commit()
-#         return "Note was added"
-#
-#     return render_template("note.html")
+@app.route("/purchases")
+def purchases():
+    # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
+    user_login = "bulatHulk"
+
+    user_purchases = db.select(f"SELECT * FROM purchase p WHERE p.person_login = '{user_login}'")
+    purch_knifes = []
+    for purchase in user_purchases:
+        knifes = db.select(f"SELECT * FROM knife inner join (SELECT * from purchase_knifes pk "
+                           f"where pk.purchase_id = '{purchase['id']}') upk on knife.id = upk.knife_id ")
+        amount = 0
+        for knf in knifes:
+            amount += int(knf["price"])
+        purchase["amount"] = amount
+        purch_knifes.append((purchase, knifes))
+
+    context = {
+        "title": "Заказы",
+        "entity": purch_knifes
+    }
+    return render_template("purchases.html", **context)
+
+@app.route("/lk")
+def lk():
+    # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
+    user_login = "bulatHulk"
+
+    person = db.select(f"SELECT * from person where login = '{user_login}'")
+
+    context = {
+        "title": "Личный кабинет",
+        "person": person[0]
+    }
+    return render_template("lk.html", **context)
+
+@app.route("/lk_change", methods=["post"])
+def lk_change():
+    # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
+    user_login = "bulatHulk"
+
+    context = {
+        "title": "Личный кабинет"
+    }
+    return render_template("lk_change.html", **context)
+
 
 
 if __name__ == '__main__':
