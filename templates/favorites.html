@@ -97,12 +97,14 @@
                 <div class="info">Цена: {{knife.price}} рублей</div>
 
                 <div class="crd_buttons" style="overflow: hidden;">
+                    <form action="/favorites">
                     <div style="float: left" class="in_favorites">
-                        <button>В корзину</button>
+                        <button type="submit" name='bsk' value="{{knife.k_name}}">В корзину</button>
                     </div>
                     <div style="float: left" class="in_basket">
-                        <button>Удалить</button>
+                        <button type="submit" name="del" value="{{knife.k_name}}">Удалить</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>

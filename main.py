@@ -103,6 +103,24 @@ def favorites():
     # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
     user_login = "bulatHulk"
 
+    to_del = request.args.get("del")
+    to_bsk = request.args.get("bsk")
+
+    if to_del != "" and to_del is not None:
+        knife_id = db.select(f"SELECT id from knife where name = '{to_del}'")[0]["id"]
+        in_fvr = db.select(f"SELECT * FROM favorites_knifes WHERE knife_id = {knife_id} and favorites_key = '{user_login}'")
+        if len(in_fvr) != 0:
+            db.insert(f"DELETE FROM favorites_knifes WHERE favorites_key = '{user_login}' and knife_id = {knife_id}")
+
+    if to_bsk is not None and to_bsk != "":
+        # TODO: если пользак не авторизован - перекинуть на авторизацию
+        knf_name = to_bsk
+        knife = db.select(f"SELECT * FROM knife k where k.name = '{knf_name}'")
+        basket_id = db.select(f"SELECT basket_id from basket b where b.person_login = '{user_login}'")
+        knife_in = db.select(f"SELECT knife_id FROM basket_knifes bk "
+                             f"where bk.basket_id = {basket_id[0]['basket_id']} and bk.knife_id = {knife[0]['id']}")
+        if len(knife_in) == 0:
+            db.insert(f"INSERT INTO basket_knifes VALUES ({knife[0]['id']}, {basket_id[0]['basket_id']})")
 
 
     companies = db.select("SELECT * FROM company c")
@@ -171,6 +189,14 @@ def basket():
     # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
     user_login = "bulatHulk"
 
+    del_knife_name = request.args.get("del")
+
+    if del_knife_name != "" and del_knife_name is not None:
+        bskt_id = db.select(f"SELECT basket_id from basket where person_login = '{user_login}'")[0]["basket_id"]
+        knife_id = db.select(f"SELECT id from knife where name = '{del_knife_name}'")[0]["id"]
+        in_bskt = db.select(f"SELECT * FROM basket_knifes WHERE knife_id = {knife_id} and basket_id = {bskt_id}")
+        if len(in_bskt) != 0:
+            db.insert(f"DELETE FROM basket_knifes WHERE basket_id = {bskt_id} and knife_id = {knife_id}")
 
 
     companies = db.select("SELECT * FROM company c")

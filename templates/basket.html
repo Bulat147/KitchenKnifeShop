@@ -98,7 +98,9 @@
                     <div style="float: left" class="in_favorites">
                     </div>
                     <div style="float: left" class="in_basket">
-                        <button>Удалить</button>
+                        <form action="/basket">
+                            <button name="del" value="{{knife.k_name}}">Удалить</button>
+                        </form>
                     </div>
                 </div>
             </div>
