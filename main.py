@@ -14,6 +14,84 @@ app.register_error_handler(404, page_not_found)
 db = Database()
 
 
+@app.route("/change_knife")
+def change_knife():
+    user_login = session.get("user_login")
+    if user_login != "admin":
+        return redirect("/home", 301)
+
+@app.route("/add_knife")
+def add_knife():
+    user_login = session.get("user_login")
+    if user_login != "admin":
+        return redirect("/home", 301)
+
+
+@app.route("/admin_home")
+def admin_home():
+    user_login = session.get("user_login")
+    if user_login != "admin":
+        return redirect("/home", 301)
+
+    user_login = session.get("user_login")
+    if user_login is None:
+        return redirect('/home', 301)
+
+    companies = db.select("SELECT * FROM company c")
+    types = db.select("SELECT * FROM type t")
+
+    knife_type = request.args.get("type")
+    company = request.args.get("company")
+    price = request.args.get("cool")
+
+    type_search = ""
+    company_search = ""
+    price_search = ""
+    where = ""
+    and1 = ""
+    and2 = ""
+
+    if knife_type is not None and knife_type != "":
+        where = " WHERE "
+        type_search = " k.type_name= \'" + knife_type + "\'"
+    else:
+        knife_type = "all"
+
+    if company is not None and company != "":
+        where = " WHERE "
+        if knife_type is not None and knife_type != "all":
+            and1 = " AND "
+        company_search = "k.company_name = \'" + company + "\'"
+    else:
+        company = "all"
+
+    if price is not None and price != "" and price != 0:
+        where = " WHERE "
+        if (knife_type is not None and knife_type != "all") or (company is not None and company != "all"):
+            and2 = " AND "
+        price_search = "k.price <= " + price
+    else:
+        price = ""
+
+    knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.name as k_name,"
+                       " k.company_name as company_name, k.price as price, k.type_name as type_name"
+                       " FROM knife k" + where + type_search + and1 + company_search + and2 + price_search +
+                       ") tbl1 inner join company c ON c.name = tbl1.company_name "
+                       ") tbl inner join public.type t ON tbl.type_name = t.name ORDER BY tbl.price DESC;")
+
+    context = {
+        'priced': price,
+        'companied': company,
+        'typed': knife_type,
+        'knifes': knifes,
+        'title': "Home page",
+        'companies': companies,
+        'types': types,
+        'login': user_login
+    }
+    return render_template("admin_home.html", **context)
+
+
 @app.route('/check_pasw_login', methods=["POST"])
 def check_password_login():
     if request.method == "POST":
@@ -73,6 +151,10 @@ def knifes_list():
         session["user_login"] = login
 
     user_login = session.get("user_login")
+
+    if user_login == "admin":
+        return redirect("/admin_home")
+
     if user_login is None:
         header = 'none'
     else:

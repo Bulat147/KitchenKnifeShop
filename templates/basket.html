@@ -8,6 +8,9 @@
         function validate_form(){
             //Считаем значения из полей name и email в переменные x и y
             var price =document.forms["left_form"]["cool"].value;
+            if (price == ""){
+                return true;
+            }
             var tst = /^[0-9]+$/.test(price);
             if(tst != 1){
                 var price_field = document.getElementsByName("cool")[0];

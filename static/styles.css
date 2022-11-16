@@ -449,6 +449,20 @@
     position: fixed;
 }
 
+#buy > button {
+    font-weight: bold;
+    width: 17em;
+    height: 3em;
+    appearance: none;
+    border: 3px solid #d90000;
+    border-radius: 5px;
+    background: white;
+    color: #d90000;
+    padding: 8px 16px;
+    font-size: 16px;
+    box-shadow: 5px 5px 5px #adadad;
+}
+
 #buy > form > button {
     font-weight: bold;
     width: 17em;

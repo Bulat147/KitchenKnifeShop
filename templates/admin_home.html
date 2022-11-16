@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="../static/styles.css">
     <script type="text/javascript">
         function validate_form(){
             //Считаем значения из полей name и email в переменные x и y
@@ -17,33 +19,25 @@
             }
         }
     </script>
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
 <header id="header">
     <div style="overflow: hidden">
-        <a href="/home" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <a href="/admin_home" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div class="person" style="float: left">
             <button>{{login}}</button>
             <div class="dropdown_menu">
-                <a href="/lks">Личный кабинет</a>
-                <a href="/purchases">Заказы</a>
-                <a href="/favorites">Избранное</a>
-                <a href="/basket">Корзина</a>
                 <a href="/home?exit=on">Выйти</a>
             </div>
         </div>
-        <p class="page_name">ИЗБРАННОЕ</p>
+        <p class="page_name">Home page</p>
     </div>
 </header>
-
-
 
 <div style="overflow: hidden">
     <div id="left_panel" style="float: left;">
         <p style="font-size: 19px; font-weight: bold">Фильтр</p>
-        <form name="left_form" onsubmit="return validate_form()" id="ff" action="/favorites">
+        <form name="left_form" onsubmit="return validate_form()" id="ff" action="/admin_home">
             <p>Тип:</p>
             <select name="type" class="select_left_panel">
                 {% if typed == "all" %}
@@ -84,6 +78,10 @@
         <input id="btn_left_panel" type="submit" form="ff" value="Показать">
     </div>
 
+    <div id="buy" style="float: left;">
+        <button name="purchase" value="on" onclick="location.href = '/add_knife'">Добавить нож</button>
+    </div>
+
     <div id="knifes_list" style="float: left;">
 
         {% for knife in knifes %}
@@ -100,14 +98,13 @@
                 <div class="info">Цена: {{knife.price}} рублей</div>
 
                 <div class="crd_buttons" style="overflow: hidden;">
-                    <form action="/favorites">
                     <div style="float: left" class="in_favorites">
-                        <button type="submit" name='bsk' value="{{knife.k_name}}">В корзину</button>
                     </div>
                     <div style="float: left" class="in_basket">
-                        <button type="submit" name="del" value="{{knife.k_name}}">Удалить</button>
+                        <form action="/change_knife">
+                            <button name="chg" value="{{knife.k_name}}">Изменить</button>
+                        </form>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
