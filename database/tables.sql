@@ -68,3 +68,9 @@ create table basket_knifes(
 
     constraint bsk_knf_pk primary key (knife_id, basket_id)
 )
+
+ALTER TABLE purchase ALTER COLUMN purchase_date set DEFAULT CURRENT_DATE;
+
+ALTER TABLE person ALTER COLUMN address set NOT NULL;
+ALTER TABLE person ALTER COLUMN type set NOT NULL;
+ALTER TABLE person ALTER COLUMN password set NOT NULL;

@@ -5,41 +5,45 @@
     <title>{{title}}</title>
     <link rel="stylesheet" href="../static/styles.css">
     <script type="text/javascript">
+
     </script>
 </head>
 <body>
+
 <header id="header">
     <div style="overflow: hidden">
         <a href="/" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div id="login" style="float: left;">
-            <button id="logining">АВТОРИЗАЦИЯ</button>
+            <button id="logining" onclick="location.href = '/authorization'">АВТОРИЗАЦИЯ</button>
         </div>
     </div>
 </header>
 
-<div class="auth_block_auth">
-    <div class="naming">Авторизация</div>
-    <form name="form" id="form" action="/" method="post">
+<div class="auth_block">
+    <div class="naming">Регистрация</div>
+    <form id="form" action="/" method="post">
         <div class="auth_text">Логин:</div>
         <input class="auth_input" name="login" id="lg">
+        <div class="auth_text">Адрес:</div>
+        <input class="auth_input" name="address" id="adr">
         <div class="auth_text">Пароль:</div>
         <input class="auth_input" type="password" name="password" id="psw">
         <br>
-        <input class="auth_submit" id="auth_in" type="submit" name="in" value="Войти">
-        <button class="auth_submit" id="auth_reg" name="registration" value="Регистрация">Регистрация</button>
     </form>
-
+    <button class="auth_submit" id="auth_in" name="cancel" value="Отмена" onclick="location.href = '/'">Отмена</button>
+    <button class="auth_submit" id="auth_reg" type="submit" form="form" name="registrated" value="Регистрация">Регистрация</button>
 </div>
 
 <script src="http://code.jquery.com/jquery-3.2.1.js"></script>
 <script>
     // функция, которая выполняется при клике на кнопку
-    $('#auth_in').on('click', (e) => {
+    $('#auth_reg').on('click', (e) => {
         e.preventDefault();
         var login=document.forms["form"]["login"].value;
         var psw=document.forms["form"]["password"].value;
+        var address=document.forms["form"]["address"].value;
 
-        if (login.length<5 || psw.length<5){
+        if (login.length<5 || psw.length<5 || address.length<4){
             if(login.length<5){
                 var login_field = document.getElementsByName("login")[0];
                 login_field.style.border = "2px solid red";
@@ -54,13 +58,21 @@
                 var psw_field = document.getElementsByName("password")[0];
                 psw_field.style.border = '1px solid black';
             }
+            if (address.length<4){
+                var address_field = document.getElementsByName("address")[0];
+                address_field.style.border = "2px solid red";
+            }else{
+                var address_field = document.getElementsByName("address")[0];
+                address_field.style.border = '1px solid black';
+            }
             return false;
-        }
-        else{
+        }else{
             var login_field = document.getElementsByName("login")[0];
             login_field.style.border = '1px solid black';
             var psw_field = document.getElementsByName("password")[0];
             psw_field.style.border = '1px solid black';
+            var address_field = document.getElementsByName("address")[0];
+            address_field.style.border = '1px solid black';
         }
         // обрабатываем полученные данные с инпутов
         let data = {}
@@ -70,21 +82,20 @@
         if ($('#psw').val()) {
             data.password = $('#psw').val();
         }
+        if ($('#adr').val()) {
+            data.address = $('#adr').val();
+        }
         // ajax-запрос
         $.ajax({
-            url: '/check_pasw_login', // добавляем url, откуда будем брать данные
+            url: '/check_login_in_db', // добавляем url, откуда будем брать данные
             method: 'post', // указываем метод
             dataType: 'html', // тип данных
             data: data, // данные запроса (в данном случае, там находятся GET-параметры)
             // функция, которая вызывается при успешном получении данных
             success: function (data) {
                 data = JSON.parse(data);
-                if (data['state'] == "false"){
-                    alert("Логин или пароль введены не верно");
-                    return false;
-                }
-                else if (data['state'] == "none"){
-                    alert("Такого пользователя не существует. Можете зарегестрироваться.")
+                if (data['pers'] == "in"){
+                    alert("Такой пользователь уже существует");
                     return false;
                 }else{
                     $('#form').submit();
@@ -94,4 +105,3 @@
     })
 </script>
 </body>
-</html>

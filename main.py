@@ -1,7 +1,9 @@
 
-from flask import Flask, render_template, request, make_response, session
+from flask import Flask, render_template, request, make_response, session, redirect, url_for
 
 from database.db_util import Database
+
+user_login = "bulatHulk"
 
 def page_not_found(e):
     return render_template("error.html")
@@ -12,18 +14,73 @@ app.register_error_handler(404, page_not_found)
 
 db = Database()
 
+@app.route('/check_pasw_login', methods=["POST"])
+def check_password_login():
+    if request.method == "POST":
+        login = request.form.get("login")
+        password = request.form.get("password")
+        psw_in_db = db.select(f"SELECT password from person p where p.login = '{login}'")
+        if len(psw_in_db) == 0:
+            return {"state": "none"}
+        if password == psw_in_db[0]["password"]:
+            return {"state": "true"}
+        else:
+            return {"state": "false"}
+
+@app.route('/check_login_in_db', methods=["POST"])
+def check_login_in_db():
+    if request.method == "POST":
+        login = request.form.get("login")
+        persons = db.select(f"SELECT * FROM person WHERE login = '{login}'")
+        if len(persons) > 0:
+            return {"pers": "in"}
+        else:
+            return {"pers": "not"}
 
 
-@app.route("/")
+@app.route("/authorization")
+def auth():
+    context = {
+        "title": "Авторизация"
+    }
+    return render_template("authorization.html", **context)
+
+@app.route("/registration")
+def registration():
+    context = {
+        "title": "Регистрация"
+
+    }
+    return render_template("registration.html", **context)
+
+@app.route("/", methods=['GET', 'POST'])
 def knifes_list():
-    # TODO: тут проверить пользователя на авторизоавнность
-    user_login = "bulatHulk"
+    if request.args.get("exit") == "on":
+        session.pop("user_login", None)
+    if request.method == 'POST':
+        if request.form.get("registration") == "Регистрация":
+            return redirect("/registration", 301)
+        login = request.form.get("login")
+        password = request.form.get("password")
+        address = request.form.get("address")
+        if address != "" and address is not None and login != "" and password != "":
+            db.insert(f"INSERT INTO person VALUES ('{login}', 'simple', '{password}', '{address}');")
+            db.insert(f"INSERT INTO basket(person_login) VALUES ('{login}');")
+            db.insert(f"INSERT INTO favorites VALUES ('{login}');")
+        session["user_login"] = login
+
+    # user_login = session.get("user_login")
+    if user_login is None:
+        header = 'none'
+    else:
+        header = 'auth'
 
     fvr = request.args.get("fvr")
     bsk = request.args.get("bsk")
 
     if fvr is not None and fvr != "":
-        # TODO: если пользак не авторизован - перекинуть на авторизацию
+        if user_login is None:
+            return redirect("/authorization", 301)
         knf_name = fvr
         knife = db.select(f"SELECT * FROM knife k where k.name = '{knf_name}'")
         knife_in = db.select(f"SELECT knife_id FROM favorites_knifes fk "
@@ -33,7 +90,8 @@ def knifes_list():
 
 
     if bsk is not None and bsk != "":
-        # TODO: если пользак не авторизован - перекинуть на авторизацию
+        if user_login is None:
+            return redirect("/authorization", 301)
         knf_name = bsk
         knife = db.select(f"SELECT * FROM knife k where k.name = '{knf_name}'")
         basket_id = db.select(f"SELECT basket_id from basket b where b.person_login = '{user_login}'")
@@ -92,7 +150,9 @@ def knifes_list():
         'knifes': knifes,
         'title': "Главная",
         'companies': companies,
-        'types': types
+        'types': types,
+        'head': header,
+        'login': user_login
     }
 
     return render_template("home_page.html", **context)
@@ -100,8 +160,9 @@ def knifes_list():
 
 @app.route("/favorites")
 def favorites():
-    # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
-    user_login = "bulatHulk"
+    # user_login = session.get("user_login")
+    if user_login is None:
+        return redirect('/', 301)
 
     to_del = request.args.get("del")
     to_bsk = request.args.get("bsk")
@@ -113,7 +174,6 @@ def favorites():
             db.insert(f"DELETE FROM favorites_knifes WHERE favorites_key = '{user_login}' and knife_id = {knife_id}")
 
     if to_bsk is not None and to_bsk != "":
-        # TODO: если пользак не авторизован - перекинуть на авторизацию
         knf_name = to_bsk
         knife = db.select(f"SELECT * FROM knife k where k.name = '{knf_name}'")
         basket_id = db.select(f"SELECT basket_id from basket b where b.person_login = '{user_login}'")
@@ -179,17 +239,29 @@ def favorites():
         'knifes': knifes,
         'title': "Избранное",
         'companies': companies,
-        'types': types
+        'types': types,
+        'login': user_login
     }
     return render_template("favorites.html", **context)
 
 
 @app.route("/basket")
 def basket():
-    # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
-    user_login = "bulatHulk"
+    # user_login = session.get("user_login")
+    if user_login is None:
+        return redirect('/', 301)
 
     del_knife_name = request.args.get("del")
+    purchase = request.args.get("purchase")
+
+    if purchase == "on":
+        basket_id = db.select(f"SELECT basket_id from basket where person_login = '{user_login}'")[0]["basket_id"]
+        knife_ids = db.select(f"SELECT knife_id from basket_knifes where basket_id = {basket_id}")
+        db.insert(f"INSERT INTO purchase(person_login) VALUES ('{user_login}')")
+        purchase_id = db.select(f"SELECT id from purchase ORDER BY id DESC")[0]["id"]
+        for kid in knife_ids:
+            db.insert(f"DELETE FROM basket_knifes WHERE basket_id = {basket_id} and knife_id = {kid['knife_id']}")
+            db.insert(f"INSERT INTO purchase_knifes VALUES ({purchase_id}, { kid['knife_id']} )")
 
     if del_knife_name != "" and del_knife_name is not None:
         bskt_id = db.select(f"SELECT basket_id from basket where person_login = '{user_login}'")[0]["basket_id"]
@@ -254,17 +326,19 @@ def basket():
         'knifes': knifes,
         'title': "Корзина",
         'companies': companies,
-        'types': types
+        'types': types,
+        'login': user_login
     }
     return render_template("basket.html", **context)
 
 
 @app.route("/purchases")
 def purchases():
-    # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
-    user_login = "bulatHulk"
+    # user_login = session.get("user_login")
+    if user_login is None:
+        return redirect('/', 301)
 
-    user_purchases = db.select(f"SELECT * FROM purchase p WHERE p.person_login = '{user_login}'")
+    user_purchases = db.select(f"SELECT * FROM purchase p WHERE p.person_login = '{user_login}' ORDER BY id DESC")
     purch_knifes = []
     for purchase in user_purchases:
         knifes = db.select(f"SELECT * FROM knife inner join (SELECT * from purchase_knifes pk "
@@ -277,30 +351,35 @@ def purchases():
 
     context = {
         "title": "Заказы",
-        "entity": purch_knifes
+        "entity": purch_knifes,
+        'login': user_login
     }
     return render_template("purchases.html", **context)
 
-@app.route("/lk")
+@app.route("/lk", methods=['GET', 'POST'])
 def lk():
-    # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
-    user_login = "bulatHulk"
+    # user_login = session.get("user_login")
+    if user_login is None or user_login == "":
+        return redirect('/', 301)
 
     person = db.select(f"SELECT * from person where login = '{user_login}'")
 
     context = {
         "title": "Личный кабинет",
-        "person": person[0]
+        "person": person[0],
+        'login': user_login
     }
     return render_template("lk.html", **context)
 
 @app.route("/lk_change", methods=["post"])
 def lk_change():
-    # TODO: тут проверить пользователя на авторизоавнность, иначе перекинуть на другую страничку
-    user_login = "bulatHulk"
+    # user_login = session.get("user_login")
+    if user_login is None:
+        return redirect('/', 301)
 
     context = {
-        "title": "Личный кабинет"
+        "title": "Личный кабинет",
+        'login': user_login
     }
     return render_template("lk_change.html", **context)
 

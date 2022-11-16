@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <script type="text/javascript">
         function validate_form(){
-            //Считаем значения из полей name и email в переменные x и y
             var price =document.forms["left_form"]["cool"].value;
+            if (price == ""){
+                return true;
+            }
             var tst = /^[0-9]+$/.test(price);
             if(tst != 1){
                 var price_field = document.getElementsByName("cool")[0];
-                price_field.style.border = "2px solid red"
+                price_field.style.border = "2px solid red";
                 return false;
             }
         }
@@ -22,26 +24,29 @@
 <body>
 
 <header id="header">
-    <!--    <div style="overflow: hidden">-->
-    <!--        <div id="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></div>-->
-    <!--        <div id="login" style="float: left;">-->
-    <!--            <button id="logining">АВТОРИЗАЦИЯ</button>-->
-    <!--        </div>-->
-    <!--    </div>-->
-
+    {% if head == "none" %}
     <div style="overflow: hidden">
-        <a href="/" id="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <a href="/" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <div id="login" style="float: left;">
+            <button id="logining" onclick="location.href = '/authorization'">АВТОРИЗАЦИЯ</button>
+        </div>
+    </div>
+
+    {% elif head == "auth" %}
+    <div style="overflow: hidden">
+        <a href="/" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div class="person" style="float: left">
-            <button>bulatHulk</button>
+            <button>{{login}}</button>
             <div class="dropdown_menu">
                 <a href="/lk">Личный кабинет</a>
                 <a href="/purchases">Заказы</a>
                 <a href="/favorites">Избранное</a>
                 <a href="/basket">Корзина</a>
-                <a>Выйти</a>
+                <a href="/?exit=on">Выйти</a>
             </div>
         </div>
     </div>
+    {% endif %}
 </header>
 
 
@@ -105,13 +110,13 @@
                 <div class="info">Цена: {{knife.price}} рублей</div>
 
                 <div class="crd_buttons" style="overflow: hidden;">
-                    <form action="/">
-                    <div style="float: left" class="in_favorites">
-                        <button type="submit" name='fvr' value="{{knife.k_name}}">В избранное</button>
-                    </div>
-                    <div style="float: left" class="in_basket">
-                        <button type="submit" name='bsk' value="{{knife.k_name}}">В корзину</button>
-                    </div>
+                    <form action="/" method="get">
+                        <div style="float: left" class="in_favorites">
+                            <button type="submit" name='fvr' value="{{knife.k_name}}">В избранное</button>
+                        </div>
+                        <div style="float: left" class="in_basket">
+                            <button type="submit" name='bsk' value="{{knife.k_name}}">В корзину</button>
+                        </div>
                     </form>
                 </div>
             </div>

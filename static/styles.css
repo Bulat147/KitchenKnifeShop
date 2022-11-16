@@ -67,7 +67,7 @@
     padding: 10px; /* Поля вокруг текста */
 }
 
-#icon-text{
+.icon-text{
     border: none;
     background-color: white;
     color: black;
@@ -81,7 +81,7 @@
     font-family: "Arial Black", serif;
 }
 
-#icon-text > b {
+.icon-text > b {
     color: #8a0000;
 }
 
@@ -150,6 +150,19 @@
 }
 
 .in_favorites > button{
+    width: 10em;
+    margin-top: 0.3em;
+    appearance: none;
+    border: 2px solid #727272;
+    border-radius: 5px;
+    background: white;
+    color: #000000;
+    padding: 6px 16px;
+    font-size: 18px;
+}
+
+.in_favorites > a{
+    text-decoration: none;
     width: 10em;
     margin-top: 0.3em;
     appearance: none;
@@ -260,7 +273,7 @@
     color: #8a0000;
 }
 
-/* authorization.html */
+/* registration.html */
 
 .auth_block{
     text-align: center;
@@ -268,6 +281,18 @@
     margin-left: 30em;
     width: 35em;
     height: 30em;
+    border: 2px solid #727272;
+    border-radius: 7px;
+
+    box-shadow: 5px 5px 5px #adadad;
+}
+
+.auth_block_auth {
+    text-align: center;
+    margin-top: 10em;
+    margin-left: 30em;
+    width: 35em;
+    height: 25em;
     border: 2px solid #727272;
     border-radius: 7px;
 
@@ -289,6 +314,7 @@
 .auth_input {
     margin-top: 1em;
     width: 17em;
+    border: 1px solid black;
 }
 
 .auth_submit {
@@ -415,4 +441,29 @@
     border-radius: 7px;
 
     box-shadow: 5px 5px 5px #adadad;
+}
+
+#buy {
+    margin-top: 38em;
+    margin-left: 3.5em;
+    position: fixed;
+}
+
+#buy > form > button {
+    font-weight: bold;
+    width: 17em;
+    height: 3em;
+    appearance: none;
+    border: 3px solid #d90000;
+    border-radius: 5px;
+    background: white;
+    color: #d90000;
+    padding: 8px 16px;
+    font-size: 16px;
+    box-shadow: 5px 5px 5px #adadad;
+}
+
+#buy > form > button:hover {
+    color: white;
+    background: #d90000;
 }

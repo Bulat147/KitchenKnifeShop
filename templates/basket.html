@@ -20,9 +20,9 @@
 <body>
 <header id="header">
     <div style="overflow: hidden">
-        <a href="/" id="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <a href="/" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div class="person" style="float: left">
-            <button>bulatHulk</button>
+            <button>{{login}}</button>
             <div class="dropdown_menu">
                 <a href="/lk">Личный кабинет</a>
                 <a href="/purchases">Заказы</a>
@@ -77,6 +77,12 @@
             <br><br><br>
         </form>
         <input id="btn_left_panel" type="submit" form="ff" value="Показать">
+    </div>
+
+    <div id="buy" style="float: left;">
+        <form action="/basket">
+            <button name="purchase" value="on">Сделать заказ</button>
+        </form>
     </div>
 
     <div id="knifes_list" style="float: left;">
