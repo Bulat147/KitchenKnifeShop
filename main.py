@@ -1,18 +1,18 @@
-
 from flask import Flask, render_template, request, make_response, session, redirect, url_for
 
 from database.db_util import Database
 
-user_login = "bulatHulk"
 
 def page_not_found(e):
     return render_template("error.html")
+
 
 app = Flask(__name__)
 app.secret_key = "777"
 app.register_error_handler(404, page_not_found)
 
 db = Database()
+
 
 @app.route('/check_pasw_login', methods=["POST"])
 def check_password_login():
@@ -26,6 +26,7 @@ def check_password_login():
             return {"state": "true"}
         else:
             return {"state": "false"}
+
 
 @app.route('/check_login_in_db', methods=["POST"])
 def check_login_in_db():
@@ -45,6 +46,7 @@ def auth():
     }
     return render_template("authorization.html", **context)
 
+
 @app.route("/registration")
 def registration():
     context = {
@@ -53,7 +55,8 @@ def registration():
     }
     return render_template("registration.html", **context)
 
-@app.route("/", methods=['GET', 'POST'])
+
+@app.route("/home", methods=['GET', 'POST'])
 def knifes_list():
     if request.args.get("exit") == "on":
         session.pop("user_login", None)
@@ -69,7 +72,7 @@ def knifes_list():
             db.insert(f"INSERT INTO favorites VALUES ('{login}');")
         session["user_login"] = login
 
-    # user_login = session.get("user_login")
+    user_login = session.get("user_login")
     if user_login is None:
         header = 'none'
     else:
@@ -87,7 +90,6 @@ def knifes_list():
                              f"where fk.favorites_key = '{user_login}' and fk.knife_id = {knife[0]['id']}")
         if len(knife_in) == 0:
             db.insert(f"INSERT INTO favorites_knifes VALUES ('{user_login}', {knife[0]['id']})")
-
 
     if bsk is not None and bsk != "":
         if user_login is None:
@@ -114,18 +116,17 @@ def knifes_list():
     and1 = ""
     and2 = ""
 
-
-    if knife_type is not None and knife_type!="":
+    if knife_type is not None and knife_type != "":
         where = " WHERE "
         type_search = " k.type_name= \'" + knife_type + "\'"
     else:
         knife_type = "all"
 
-    if company is not None and company!="":
+    if company is not None and company != "":
         where = " WHERE "
         if knife_type is not None and knife_type != "all":
             and1 = " AND "
-        company_search = "k.company_name = \'" + company +"\'"
+        company_search = "k.company_name = \'" + company + "\'"
     else:
         company = "all"
 
@@ -133,13 +134,13 @@ def knifes_list():
         where = " WHERE "
         if (knife_type is not None and knife_type != "all") or (company is not None and company != "all"):
             and2 = " AND "
-        price_search = "k.price <= "+price
+        price_search = "k.price <= " + price
     else:
         price = ""
 
     knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.name as k_name,"
                        " k.company_name as company_name, k.price as price, k.type_name as type_name"
-                       " FROM knife k"+ where + type_search + and1 + company_search + and2 + price_search +
+                       " FROM knife k" + where + type_search + and1 + company_search + and2 + price_search +
                        ") tbl1 inner join company c ON c.name = tbl1.company_name "
                        ") tbl inner join public.type t ON tbl.type_name = t.name ORDER BY tbl.price DESC;")
 
@@ -160,16 +161,17 @@ def knifes_list():
 
 @app.route("/favorites")
 def favorites():
-    # user_login = session.get("user_login")
+    user_login = session.get("user_login")
     if user_login is None:
-        return redirect('/', 301)
+        return redirect('/home', 301)
 
     to_del = request.args.get("del")
     to_bsk = request.args.get("bsk")
 
     if to_del != "" and to_del is not None:
         knife_id = db.select(f"SELECT id from knife where name = '{to_del}'")[0]["id"]
-        in_fvr = db.select(f"SELECT * FROM favorites_knifes WHERE knife_id = {knife_id} and favorites_key = '{user_login}'")
+        in_fvr = db.select(
+            f"SELECT * FROM favorites_knifes WHERE knife_id = {knife_id} and favorites_key = '{user_login}'")
         if len(in_fvr) != 0:
             db.insert(f"DELETE FROM favorites_knifes WHERE favorites_key = '{user_login}' and knife_id = {knife_id}")
 
@@ -181,7 +183,6 @@ def favorites():
                              f"where bk.basket_id = {basket_id[0]['basket_id']} and bk.knife_id = {knife[0]['id']}")
         if len(knife_in) == 0:
             db.insert(f"INSERT INTO basket_knifes VALUES ({knife[0]['id']}, {basket_id[0]['basket_id']})")
-
 
     companies = db.select("SELECT * FROM company c")
     types = db.select("SELECT * FROM type t")
@@ -197,18 +198,17 @@ def favorites():
     and1 = ""
     and2 = ""
 
-
-    if knife_type is not None and knife_type!="":
+    if knife_type is not None and knife_type != "":
         where = " WHERE "
         type_search = " k.type_name= \'" + knife_type + "\'"
     else:
         knife_type = "all"
 
-    if company is not None and company!="":
+    if company is not None and company != "":
         where = " WHERE "
         if knife_type is not None and knife_type != "all":
             and1 = " AND "
-        company_search = "k.company_name = \'" + company +"\'"
+        company_search = "k.company_name = \'" + company + "\'"
     else:
         company = "all"
 
@@ -216,19 +216,19 @@ def favorites():
         where = " WHERE "
         if (knife_type is not None and knife_type != "all") or (company is not None and company != "all"):
             and2 = " AND "
-        price_search = "k.price <= "+price
+        price_search = "k.price <= " + price
     else:
         price = ""
 
     user_favorites_relation_knifes = f"(SELECT k.id, k.name, k.company_name, k.type_name, k.price, k.photo_path FROM knife k " \
-                            f"inner join (SELECT knife_id from favorites_knifes fks inner join (SELECT * " \
-                            f"FROM favorites f INNER JOIN (SELECT * FROM person where person.login = \'{user_login}\') prs " \
-                            f"ON f.person_login = prs.login) fvr on fvr.person_login = fks.favorites_key) ids " \
-                            f"on ids.knife_id = k.id) k"
+                                     f"inner join (SELECT knife_id from favorites_knifes fks inner join (SELECT * " \
+                                     f"FROM favorites f INNER JOIN (SELECT * FROM person where person.login = \'{user_login}\') prs " \
+                                     f"ON f.person_login = prs.login) fvr on fvr.person_login = fks.favorites_key) ids " \
+                                     f"on ids.knife_id = k.id) k"
 
     knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.name as k_name,"
                        " k.company_name as company_name, k.price as price, k.type_name as type_name"
-                       " FROM "+user_favorites_relation_knifes + where + type_search + and1 + company_search + and2 + price_search +
+                       " FROM " + user_favorites_relation_knifes + where + type_search + and1 + company_search + and2 + price_search +
                        ") tbl1 inner join company c ON c.name = tbl1.company_name "
                        ") tbl inner join public.type t ON tbl.type_name = t.name ORDER BY tbl.price DESC;")
 
@@ -247,9 +247,9 @@ def favorites():
 
 @app.route("/basket")
 def basket():
-    # user_login = session.get("user_login")
+    user_login = session.get("user_login")
     if user_login is None:
-        return redirect('/', 301)
+        return redirect('/home', 301)
 
     del_knife_name = request.args.get("del")
     purchase = request.args.get("purchase")
@@ -261,7 +261,7 @@ def basket():
         purchase_id = db.select(f"SELECT id from purchase ORDER BY id DESC")[0]["id"]
         for kid in knife_ids:
             db.insert(f"DELETE FROM basket_knifes WHERE basket_id = {basket_id} and knife_id = {kid['knife_id']}")
-            db.insert(f"INSERT INTO purchase_knifes VALUES ({purchase_id}, { kid['knife_id']} )")
+            db.insert(f"INSERT INTO purchase_knifes VALUES ({purchase_id}, {kid['knife_id']} )")
 
     if del_knife_name != "" and del_knife_name is not None:
         bskt_id = db.select(f"SELECT basket_id from basket where person_login = '{user_login}'")[0]["basket_id"]
@@ -269,7 +269,6 @@ def basket():
         in_bskt = db.select(f"SELECT * FROM basket_knifes WHERE knife_id = {knife_id} and basket_id = {bskt_id}")
         if len(in_bskt) != 0:
             db.insert(f"DELETE FROM basket_knifes WHERE basket_id = {bskt_id} and knife_id = {knife_id}")
-
 
     companies = db.select("SELECT * FROM company c")
     types = db.select("SELECT * FROM type t")
@@ -285,18 +284,17 @@ def basket():
     and1 = ""
     and2 = ""
 
-
-    if knife_type is not None and knife_type!="":
+    if knife_type is not None and knife_type != "":
         where = " WHERE "
         type_search = " k.type_name= \'" + knife_type + "\'"
     else:
         knife_type = "all"
 
-    if company is not None and company!="":
+    if company is not None and company != "":
         where = " WHERE "
         if knife_type is not None and knife_type != "all":
             and1 = " AND "
-        company_search = "k.company_name = \'" + company +"\'"
+        company_search = "k.company_name = \'" + company + "\'"
     else:
         company = "all"
 
@@ -304,7 +302,7 @@ def basket():
         where = " WHERE "
         if (knife_type is not None and knife_type != "all") or (company is not None and company != "all"):
             and2 = " AND "
-        price_search = "k.price <= "+price
+        price_search = "k.price <= " + price
     else:
         price = ""
 
@@ -312,10 +310,9 @@ def basket():
                                   f"inner join (SELECT basket_id from basket b where b.person_login= \'{user_login}\') tbl " \
                                   f"ON bk.basket_id = tbl.basket_id) tbl2 ON k.id = tbl2.knife_id) k"
 
-
     knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.name as k_name,"
                        " k.company_name as company_name, k.price as price, k.type_name as type_name"
-                       " FROM "+user_basket_relation_knifes + where + type_search + and1 + company_search + and2 + price_search +
+                       " FROM " + user_basket_relation_knifes + where + type_search + and1 + company_search + and2 + price_search +
                        ") tbl1 inner join company c ON c.name = tbl1.company_name "
                        ") tbl inner join public.type t ON tbl.type_name = t.name ORDER BY tbl.price DESC;")
 
@@ -334,9 +331,9 @@ def basket():
 
 @app.route("/purchases")
 def purchases():
-    # user_login = session.get("user_login")
+    user_login = session.get("user_login")
     if user_login is None:
-        return redirect('/', 301)
+        return redirect('/home', 301)
 
     user_purchases = db.select(f"SELECT * FROM purchase p WHERE p.person_login = '{user_login}' ORDER BY id DESC")
     purch_knifes = []
@@ -356,11 +353,17 @@ def purchases():
     }
     return render_template("purchases.html", **context)
 
-@app.route("/lk", methods=['GET', 'POST'])
+
+@app.route("/lks", methods=["POST", "GET"])
 def lk():
-    # user_login = session.get("user_login")
+    if request.method == "POST":
+        login = session.get("user_login")
+        address = request.form.get("address")
+        password = request.form.get("password")
+        db.insert(f"UPDATE person SET address='{address}', password='{password}' where login = '{login}';")
+    user_login = session.get("user_login")
     if user_login is None or user_login == "":
-        return redirect('/', 301)
+        return redirect('/home', 301)
 
     person = db.select(f"SELECT * from person where login = '{user_login}'")
 
@@ -371,18 +374,18 @@ def lk():
     }
     return render_template("lk.html", **context)
 
+
 @app.route("/lk_change", methods=["post"])
 def lk_change():
-    # user_login = session.get("user_login")
+    user_login = session.get("user_login")
     if user_login is None:
-        return redirect('/', 301)
+        return redirect('/home', 301)
 
     context = {
         "title": "Личный кабинет",
         'login': user_login
     }
     return render_template("lk_change.html", **context)
-
 
 
 if __name__ == '__main__':

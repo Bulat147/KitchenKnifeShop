@@ -12,7 +12,7 @@
 
 <header id="header">
     <div style="overflow: hidden">
-        <a href="/" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <a href="/home" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div id="login" style="float: left;">
             <button id="logining" onclick="location.href = '/authorization'">АВТОРИЗАЦИЯ</button>
         </div>
@@ -21,7 +21,7 @@
 
 <div class="auth_block">
     <div class="naming">Регистрация</div>
-    <form id="form" action="/" method="post">
+    <form id="form" action="/home" method="post">
         <div class="auth_text">Логин:</div>
         <input class="auth_input" name="login" id="lg">
         <div class="auth_text">Адрес:</div>
@@ -30,7 +30,7 @@
         <input class="auth_input" type="password" name="password" id="psw">
         <br>
     </form>
-    <button class="auth_submit" id="auth_in" name="cancel" value="Отмена" onclick="location.href = '/'">Отмена</button>
+    <button class="auth_submit" id="auth_in" name="cancel" value="Отмена" onclick="location.href = '/home'">Отмена</button>
     <button class="auth_submit" id="auth_reg" type="submit" form="form" name="registrated" value="Регистрация">Регистрация</button>
 </div>
 

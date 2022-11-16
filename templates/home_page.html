@@ -26,7 +26,7 @@
 <header id="header">
     {% if head == "none" %}
     <div style="overflow: hidden">
-        <a href="/" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <a href="/home" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div id="login" style="float: left;">
             <button id="logining" onclick="location.href = '/authorization'">АВТОРИЗАЦИЯ</button>
         </div>
@@ -34,15 +34,15 @@
 
     {% elif head == "auth" %}
     <div style="overflow: hidden">
-        <a href="/" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <a href="/home" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div class="person" style="float: left">
             <button>{{login}}</button>
             <div class="dropdown_menu">
-                <a href="/lk">Личный кабинет</a>
+                <a href='/lks'>Личный кабинет</a>
                 <a href="/purchases">Заказы</a>
                 <a href="/favorites">Избранное</a>
                 <a href="/basket">Корзина</a>
-                <a href="/?exit=on">Выйти</a>
+                <a href="/home?exit=on">Выйти</a>
             </div>
         </div>
     </div>
@@ -53,7 +53,7 @@
 <div style="overflow: hidden">
     <div id="left_panel" style="float: left;">
         <p style="font-size: 19px; font-weight: bold">Фильтр</p>
-        <form name="left_form" onsubmit="return validate_form()" id="ff" action="/">
+        <form name="left_form" onsubmit="return validate_form()" id="ff" action="/home">
             <p>Тип:</p>
             <select name="type" class="select_left_panel">
                 {% if typed == "all" %}
@@ -110,7 +110,7 @@
                 <div class="info">Цена: {{knife.price}} рублей</div>
 
                 <div class="crd_buttons" style="overflow: hidden;">
-                    <form action="/" method="get">
+                    <form action="/home">
                         <div style="float: left" class="in_favorites">
                             <button type="submit" name='fvr' value="{{knife.k_name}}">В избранное</button>
                         </div>

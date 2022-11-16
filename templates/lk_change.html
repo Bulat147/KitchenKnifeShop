@@ -8,15 +8,15 @@
 <body>
 <header id="header">
     <div style="overflow: hidden">
-        <a href="/" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <a href="/home" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
         <div class="person" style="float: left">
             <button>{{login}}</button>
             <div class="dropdown_menu">
-                <a href="/lk">Личный кабинет</a>
+                <a href="/lks">Личный кабинет</a>
                 <a href="/purchases">Заказы</a>
                 <a href="/favorites">Избранное</a>
                 <a href="/basket">Корзина</a>
-                <a>Выйти</a>
+                <a href="/home?exit=on">Выйти</a>
             </div>
         </div>
         <p class="page_name_lk">ЛИЧНЫЙ КАБИНЕТ</p>
@@ -26,19 +26,51 @@
 
 <div class="auth_block">
     <div class="naming">Изменить данные</div>
-    <form action="/lk" method="post">
-        <div class="auth_text">Логин:</div>
-        <input class="auth_input" name="login">
+    <form action="/lks" method="post" id="ffr">
+        <div class="auth_text" style="font-family: 'Arial', sans-serif; font-size: 20px;">Логин: {{ login }}</div>
         <div class="auth_text">Адрес:</div>
-        <input class="auth_input" name="address">
+        <input class="auth_input" name="address" id="adr">
         <div class="auth_text">Пароль:</div>
-        <input class="auth_input" type="password" name="password">
+        <input class="auth_input" type="password" name="password" id=psw>
         <br>
-        <input class="auth_submit" id="auth_in" type="submit" name="input" value="Отмена">
-        <input class="auth_submit" type="submit" id="auth_reg" name="registration" value="Сохранить">
-    </form>
+        </form>
+    <button class="auth_submit" id="auth_in" name="input" value="Отмена" onclick="location.href = '/lks'">Отмена</button>
+    <button class="auth_submit" type="submit" id="auth_reg" name="registration" value="Сохранить" form="ffr">Сохранить</button>
+
 </div>
 
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+<script>
+    // функция, которая выполняется при клике на кнопку
+    $('#auth_reg').on('click', (e) => {
+        e.preventDefault();
+        var psw=document.forms["ffr"]["password"].value;
+        var address=document.forms["ffr"]["address"].value;
 
+        if (psw.length<5 || address.length<4){
+            if (psw.length<5){
+                var psw_field = document.getElementsByName("password")[0];
+                psw_field.style.border = "2px solid red";
+            }else{
+                var psw_field = document.getElementsByName("password")[0];
+                psw_field.style.border = '1px solid black';
+            }
+            if (address.length<4){
+                var address_field = document.getElementsByName("address")[0];
+                address_field.style.border = "2px solid red";
+            }else{
+                var address_field = document.getElementsByName("address")[0];
+                address_field.style.border = '1px solid black';
+            }
+            return false;
+        }else{
+            var psw_field = document.getElementsByName("password")[0];
+            psw_field.style.border = '1px solid black';
+            var address_field = document.getElementsByName("address")[0];
+            address_field.style.border = '1px solid black';
+        }
+        $("#ffr").submit();
+    })
+</script>
 </body>
 </html>
