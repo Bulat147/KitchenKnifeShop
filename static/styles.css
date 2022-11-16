@@ -477,7 +477,24 @@
     box-shadow: 5px 5px 5px #adadad;
 }
 
+#buy > button:hover {
+    color: white;
+    background: #d90000;
+}
+
 #buy > form > button:hover {
     color: white;
     background: #d90000;
+}
+
+.knf_block {
+    text-align: center;
+    margin-top: 5em;
+    margin-left: 30em;
+    width: 35em;
+    height: 38em;
+    border: 2px solid #727272;
+    border-radius: 7px;
+
+    box-shadow: 5px 5px 5px #adadad;
 }

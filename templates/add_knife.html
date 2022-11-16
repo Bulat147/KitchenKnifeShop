@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="../static/styles.css">
+
+    <script type="text/javascript">
+        function validate_form(){
+            var price =document.forms["ffr"]["price"].value;
+            var tst = /^[0-9]+$/.test(price);
+            if(tst != 1){
+                var price_field = document.getElementsByName("price")[0];
+                price_field.style.border = "2px solid red";
+                return false;
+            }
+        }
+
+    </script>
+</head>
+<body>
+<header id="header">
+    <div style="overflow: hidden">
+        <a href="/admin_home" class="icon-text" style="float: left;">НАРЕ<b>ЗАЙКА</b></a>
+        <div class="person" style="float: left">
+            <button>{{login}}</button>
+            <div class="dropdown_menu">
+                <a href="/home?exit=on">Выйти</a>
+            </div>
+        </div>
+        <p class="page_name_lk">Home page</p>
+    </div>
+</header>
+
+
+<div class="knf_block">
+    <div class="naming">Добавить нож</div>
+    <form action="/admin_home" id="ffr">
+
+        <div class="auth_text">Название:</div>
+        <input class="auth_input" name="name" id="nme">
+        <div class="auth_text">Тип:</div>
+        <input class="auth_input" name="types" id="tpe">
+        <div class="auth_text">Цена:</div>
+        <input class="auth_input" name="price" id="prc">
+        <div class="auth_text">Компания:</div>
+        <input class="auth_input" name="companies" id="cmp">
+        <div class="auth_text">Файл:</div>
+        <input class="auth_input" name="image" id="img">
+        <br>
+    </form>
+    <button class="auth_submit" id="auth_in" name="input" value="Отмена" onclick="location.href = '/admin_home'">Отмена</button>
+    <button class="auth_submit" type="submit" id="auth_reg" name="registration" value="Сохранить" form="ffr">Сохранить</button>
+
+</div>
+
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
+<script>
+    // функция, которая выполняется при клике на кнопку
+    $('#auth_reg').on('click', (e) => {
+        e.preventDefault();
+        var name=document.forms["ffr"]["name"].value;
+        var types=document.forms["ffr"]["types"].value;
+        var price=document.forms["ffr"]["price"].value;
+        var companies=document.forms["ffr"]["companies"].value;
+        var image=document.forms["ffr"]["image"].value;
+
+        if (name.length<3 || types.length<3 || price.length<3 || companies.length<3 || image.length<3){
+            if (name.length<3){
+                var name_field = document.getElementsByName("name")[0];
+                name_field.style.border = "2px solid red";
+            }else{
+                var name_field = document.getElementsByName("name")[0];
+                name_field.style.border = '1px solid black';
+            }
+            if (types.length<3){
+                var types_field = document.getElementsByName("types")[0];
+                types_field.style.border = "2px solid red";
+            }else{
+                var types_field = document.getElementsByName("types")[0];
+                types_field.style.border = '1px solid black';
+            }
+            if (price.length<3){
+                var price_field = document.getElementsByName("price")[0];
+                price_field.style.border = "2px solid red";
+            }else{
+                var price_field = document.getElementsByName("price")[0];
+                price_field.style.border = '1px solid black';
+            }
+            if (companies.length<3){
+                var companies_field = document.getElementsByName("companies")[0];
+                companies_field.style.border = "2px solid red";
+            }else{
+                var companies_field = document.getElementsByName("companies")[0];
+                companies_field.style.border = '1px solid black';
+            }
+            if (image.length<3){
+                var image_field = document.getElementsByName("image")[0];
+                image_field.style.border = "2px solid red";
+            }else{
+                var image_field = document.getElementsByName("image")[0];
+                image_field.style.border = '1px solid black';
+            }
+            return false;
+        }else{
+            var name_field = document.getElementsByName("name")[0];
+            name_field.style.border = '1px solid black';
+            var types_field = document.getElementsByName("types")[0];
+            types_field.style.border = '1px solid black';
+            var price_field = document.getElementsByName("price")[0];
+            price_field.style.border = '1px solid black';
+            var companies_field = document.getElementsByName("companies")[0];
+            companies_field.style.border = '1px solid black';
+            var image_field = document.getElementsByName("image")[0];
+            image_field.style.border = '1px solid black';
+        }
+        $("#ffr").submit();
+    })
+</script>
+</body>
+</html>

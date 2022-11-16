@@ -14,7 +14,7 @@
             var tst = /^[0-9]+$/.test(price);
             if(tst != 1){
                 var price_field = document.getElementsByName("cool")[0];
-                price_field.style.border = "2px solid red"
+                price_field.style.border = "2px solid red";
                 return false;
             }
         }
@@ -88,7 +88,7 @@
 
         <div class="card" style="overflow: hidden">
             <div class="crd_img" style="float: left">
-                <img src="../static/chef-min.jpg">
+                <img src="{{knife.imge}}">
             </div>
             <div class="crd_cnt" style="float: left">
                 <div class="name">{{knife.k_name}}</div>
@@ -101,9 +101,9 @@
                     <div style="float: left" class="in_favorites">
                     </div>
                     <div style="float: left" class="in_basket">
-                        <form action="/change_knife">
-                            <button name="chg" value="{{knife.k_name}}">Изменить</button>
-                        </form>
+<!--                        <form action="/change_knife">-->
+<!--                            <button name="chg" value="{{knife.k_name}}">Изменить</button>-->
+<!--                        </form>-->
                     </div>
                 </div>
             </div>

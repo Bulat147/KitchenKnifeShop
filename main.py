@@ -6,13 +6,13 @@ from database.db_util import Database
 def page_not_found(e):
     return render_template("error.html")
 
+img_name = "../static/"
 
 app = Flask(__name__)
 app.secret_key = "777"
 app.register_error_handler(404, page_not_found)
 
 db = Database()
-
 
 @app.route("/change_knife")
 def change_knife():
@@ -27,15 +27,38 @@ def add_knife():
         return redirect("/home", 301)
 
 
+    context = {
+        "title": "Добавить нож",
+        "login": user_login
+    }
+    return render_template("add_knife.html", **context)
+
+
 @app.route("/admin_home")
 def admin_home():
     user_login = session.get("user_login")
     if user_login != "admin":
         return redirect("/home", 301)
 
-    user_login = session.get("user_login")
-    if user_login is None:
-        return redirect('/home', 301)
+    k_name = request.args.get("name")
+    types = request.args.get("types")
+    prices = request.args.get("price")
+    companieses = request.args.get("companies")
+    image = request.args.get("image")
+    if image is not None:
+        image = img_name + image
+
+    if k_name is not None and types is not None and prices is not None and companieses is not None and image is not None:
+        try:
+            db.insert(f"INSERT INTO type VALUES ('{types}', '{types}')")
+        except:
+            pass
+        try:
+            db.insert(f"INSERT INTO company VALUES ('{companieses}', 'Япония')")
+        except:
+            pass
+        db.insert(f"INSERT INTO knife(name, type_name, price, company_name, photo_path) "
+                  f"VALUES ('{k_name}', '{types}', {prices}, '{companieses}', '{image}')")
 
     companies = db.select("SELECT * FROM company c")
     types = db.select("SELECT * FROM type t")
@@ -74,7 +97,7 @@ def admin_home():
         price = ""
 
     knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.name as k_name,"
-                       " k.company_name as company_name, k.price as price, k.type_name as type_name"
+                       " k.company_name as company_name, k.price as price, k.type_name as type_name, k.photo_path as imge"
                        " FROM knife k" + where + type_search + and1 + company_search + and2 + price_search +
                        ") tbl1 inner join company c ON c.name = tbl1.company_name "
                        ") tbl inner join public.type t ON tbl.type_name = t.name ORDER BY tbl.price DESC;")
@@ -220,7 +243,7 @@ def knifes_list():
     else:
         price = ""
 
-    knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.name as k_name,"
+    knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.photo_path as imge, k.name as k_name,"
                        " k.company_name as company_name, k.price as price, k.type_name as type_name"
                        " FROM knife k" + where + type_search + and1 + company_search + and2 + price_search +
                        ") tbl1 inner join company c ON c.name = tbl1.company_name "
@@ -308,7 +331,7 @@ def favorites():
                                      f"ON f.person_login = prs.login) fvr on fvr.person_login = fks.favorites_key) ids " \
                                      f"on ids.knife_id = k.id) k"
 
-    knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.name as k_name,"
+    knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.photo_path as imge, k.name as k_name,"
                        " k.company_name as company_name, k.price as price, k.type_name as type_name"
                        " FROM " + user_favorites_relation_knifes + where + type_search + and1 + company_search + and2 + price_search +
                        ") tbl1 inner join company c ON c.name = tbl1.company_name "
@@ -392,7 +415,7 @@ def basket():
                                   f"inner join (SELECT basket_id from basket b where b.person_login= \'{user_login}\') tbl " \
                                   f"ON bk.basket_id = tbl.basket_id) tbl2 ON k.id = tbl2.knife_id) k"
 
-    knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.name as k_name,"
+    knifes = db.select(" SELECT * FROM (SELECT * from (SELECT k.photo_path as imge, k.name as k_name,"
                        " k.company_name as company_name, k.price as price, k.type_name as type_name"
                        " FROM " + user_basket_relation_knifes + where + type_search + and1 + company_search + and2 + price_search +
                        ") tbl1 inner join company c ON c.name = tbl1.company_name "
