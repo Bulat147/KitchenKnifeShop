@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, make_response, session, redir
 
 from database.db_util import Database
 
-
 def page_not_found(e):
     return render_template("error.html")
 
@@ -26,7 +25,6 @@ def add_knife():
     if user_login != "admin":
         return redirect("/home", 301)
 
-
     context = {
         "title": "Добавить нож",
         "login": user_login
@@ -47,18 +45,27 @@ def admin_home():
     image = request.args.get("image")
     if image is not None:
         image = img_name + image
+    else:
+        image = img_name + "bread2.jpg"
 
     if k_name is not None and types is not None and prices is not None and companieses is not None and image is not None:
-        try:
-            db.insert(f"INSERT INTO type VALUES ('{types}', '{types}')")
-        except:
-            pass
-        try:
-            db.insert(f"INSERT INTO company VALUES ('{companieses}', 'Япония')")
-        except:
-            pass
+        types_in_db = db.select("SELECT * from type")
+        flag1 = True
+        for tpe in types_in_db:
+            if (tpe["description"] == types):
+                flag1 = False
+        if (flag1):
+            db.insert(f"INSERT INTO type VALUES ('{types}', '{types}');")
+
+        comp_in_db = db.select("SELECT * from company")
+        flag2 = True
+        for cp in comp_in_db:
+            if (cp["name"] == companieses):
+                flag2 = False
+        if (flag2):
+            db.insert(f"INSERT INTO company VALUES ('{companieses}', 'Япония');")
         db.insert(f"INSERT INTO knife(name, type_name, price, company_name, photo_path) "
-                  f"VALUES ('{k_name}', '{types}', {prices}, '{companieses}', '{image}')")
+                  f"VALUES ('{k_name}', '{types}', {prices}, '{companieses}', '{image}');")
 
     companies = db.select("SELECT * FROM company c")
     types = db.select("SELECT * FROM type t")

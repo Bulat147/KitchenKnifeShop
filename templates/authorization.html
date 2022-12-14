@@ -78,7 +78,9 @@
             data: data, // данные запроса (в данном случае, там находятся GET-параметры)
             // функция, которая вызывается при успешном получении данных
             success: function (data) {
+                alert(typeof data)
                 data = JSON.parse(data);
+                alert(data)
                 if (data['state'] == "false"){
                     alert("Логин или пароль введены не верно");
                     return false;
